@@ -2,9 +2,14 @@ import pyaudio
 import wave
 import speech_recognition as sr
 import subprocess
+from instruction import Commander
+
+
+running = True
 
 def Say(text):
-    text = "You said " + text
+    text = "Your command is " + text
+    # command for windows
     subprocess.call("mshta vbscript:Execute(\"CreateObject(\"\"SAPI.SpVoice\"\").Speak(\"\""+text+"\"\")(window.close)\")", shell= True)
 
 
@@ -39,6 +44,8 @@ def PlaySound(filename):
 
 
 r = sr.Recognizer()
+cmd = Commander()
+
 
 def InitSpeech():
     print("Listening....")
@@ -55,16 +62,21 @@ def InitSpeech():
         command = r.recognize_google(audio) # recognize speech using Google Speech Recognition
         print("Your command:")
         print(command)
-
-        Say(command)
+        if  "quit" in command:
+            global running
+            running = False
+            print("This is quit")
+        else:
+            cmd.discover(command)
+       # Say(command)
     except:
-        print("Sorry, I didn't get it. Would you mind repeating it?")
-
-    
-    
+        print("Sorry, I didn't get it. Would you mind repeating it?") 
 
     PlaySound("./sharp.wav")
 
-InitSpeech()
+
+while running == True:
+    InitSpeech()
+
 
 
