@@ -8,7 +8,6 @@ from instruction import Commander
 running = True
 
 def Say(text):
-    text = "Your command is " + text
     # command for windows
     subprocess.call("mshta vbscript:Execute(\"CreateObject(\"\"SAPI.SpVoice\"\").Speak(\"\""+text+"\"\")(window.close)\")", shell= True)
 
@@ -50,7 +49,6 @@ cmd = Commander()
 def InitSpeech():
     print("Listening....")
     PlaySound("./sharp.wav")
-
     with sr.Microphone() as source: # use the default microphone as the audio source
         print("Say something")
         audio = r.listen(source) # listen for the first phrase and extract it into audio data
@@ -65,12 +63,13 @@ def InitSpeech():
         if  "quit" in command:
             global running
             running = False
-            print("This is quit")
+            Say("Good Bye! My dear Friend. Come back soon")
         else:
             cmd.discover(command)
        # Say(command)
     except:
-        print("Sorry, I didn't get it. Would you mind repeating it?") 
+        Say("Sorry, I didn't get it. Would you mind repeating it?") 
+
 
     PlaySound("./sharp.wav")
 
